@@ -68,6 +68,7 @@ class PositionManagement:
         self.selectionY = -1
 
         self.blockJustPlaced = False
+        self.blocksAround = []
 
     def getTile(self, i, j):
 
@@ -145,108 +146,150 @@ class PositionManagement:
     #         else:
     #             return True
 
+    def setBlocksAround(self):
+        self.blocksAround[0] = self.tileMap[self.realative_position[0]][self.realative_position[1]].isSolid
+        self.blocksAround[1] = self.tileMap[self.realative_position[0] - 1][self.realative_position[1] - 1].isSolid
+        self.blocksAround[2] = self.tileMap[self.realative_position[0]][self.realative_position[1] - 1].isSolid
+        self.blocksAround[3] = self.tileMap[self.realative_position[0] + 1][self.realative_position[1] - 1].isSolid
+        self.blocksAround[4] = self.tileMap[self.realative_position[0] + 1][self.realative_position[1]].isSolid
+        self.blocksAround[5] = self.tileMap[self.realative_position[0] + 1][self.realative_position[1] + 1].isSolid
+        self.blocksAround[6] = self.tileMap[self.realative_position[0]][self.realative_position[1] + 1].isSolid
+        self.blocksAround[7] = self.tileMap[self.realative_position[0] - 1][self.realative_position[1] + 1].isSolid
+        self.blocksAround[8] = self.tileMap[self.realative_position[0] - 1][self.realative_position[1]].isSolid
+
+
     def canMove(self):
         result = True
-        if self.lastDirection == "left":
-            nearTile = self.tileMap[self.realative_position[1]][self.realative_position[0] - 1]
-            nearTileElevation = self.currentMap[self.realative_position[1]][self.realative_position[0] - 1][1]
-            nearLowerTile = self.tileMap[self.realative_position[1] + 1][self.realative_position[0] - 1]
-            nearLowerTileElevation = self.currentMap[self.realative_position[1] - 1][self.realative_position[0] - 1][1]
-
-            if self.insideTileX <= self.tileSize // 3:
-                if nearTile.isSolid:  # and nearTileElevation <= self.player.elevation:
-                    result = False
-                if nearLowerTile.isSolid:
-                    if self.tileSize // 2 < self.insideTileY <= self.tileSize:
-                        result = False
-
-                    # print("relative:", self.realative_position[0] - 1, "barrier:", self.leftBarrier)
-                    # if self.realative_position[0] < self.leftBarrier:
-                    #     result = True
-                    # else:
-                    #     result = False
-
-                # if nearLowerTile.isSolid:
-                #     if self.bottomBarrier * self.tileSize < (self.realative_position[1] + 1.2) * self.tileSize:
-                #         result = True
-                #     else:
-                #         result = False
-
-                # if self.topBarrier * self.tileSize > (self.realative_position[1] + 0.5) * self.tileSize:
-                #     result = True
-                # else:
-                #     result = False
-
-        if self.lastDirection == "right":
-            nearTile = self.tileMap[self.realative_position[1]][self.realative_position[0] + 1]
-            nearTileElevation = self.currentMap[self.realative_position[1]][self.realative_position[0] + 1][1]
-            nearLowerTile = self.tileMap[self.realative_position[1] + 1][self.realative_position[0] + 1]
-            nearLowerTileElevation = self.currentMap[self.realative_position[1] - 1][self.realative_position[0] + 1][1]
-
-            if self.insideTileX > 2 * self.tileSize // 3:
-                if nearTile.isSolid:  # and nearTileElevation <= self.player.elevation:
-                    result = False
-                if nearLowerTile.isSolid:
-                    if self.tileSize // 2 <= self.insideTileY <= self.tileSize:
-                        result = False
-
-        if self.lastDirection == "up":
-            nearTile = self.tileMap[self.realative_position[1] - 1][self.realative_position[0]]
-            nearTileElevation = self.currentMap[self.realative_position[1] - 1][self.realative_position[0]][1]
-            nearLeftTile = self.tileMap[self.realative_position[1] - 1][self.realative_position[0] - 1]
-            nearLeftTileElevation = self.currentMap[self.realative_position[1] - 1][self.realative_position[0] - 1][1]
-            nearRightTile = self.tileMap[self.realative_position[1] - 1][self.realative_position[0] + 1]
-            nearRightTileElevation = self.currentMap[self.realative_position[1] - 1][self.realative_position[0] + 1][1]
-
-            if self.insideTileY <= self.tileSize // 15:
-                if nearTile.isSolid:
-                    result = False
-                if nearLeftTile.isSolid:
-                    if self.insideTileX <= self.tileSize // 3:
-                        result = False
-                if nearRightTile.isSolid:
-                    if self.insideTileX > 2 * self.tileSize // 3:
-                        result = False
-
-        if self.lastDirection == "down":
-            nearTile = self.tileMap[self.realative_position[1] + 1][self.realative_position[0]]
-            nearTileElevation = self.currentMap[self.realative_position[1] + 1][self.realative_position[0]][1]
-            nearLeftTile = self.tileMap[self.realative_position[1] + 1][self.realative_position[0] - 1]
-            nearLeftTileElevation = self.currentMap[self.realative_position[1] + 1][self.realative_position[0] - 1][1]
-            nearRightTile = self.tileMap[self.realative_position[1] + 1][self.realative_position[0] + 1]
-            nearRightTileElevation = self.currentMap[self.realative_position[1] + 1][self.realative_position[0] + 1][1]
-
-            if self.insideTileY >= self.tileSize // 2:
-                if nearTile.isSolid:
-                    result = False
-                if nearLeftTile.isSolid:
-                    if self.insideTileX <= self.tileSize // 3:
-                        result = False
-                if nearRightTile.isSolid:
-                    if self.insideTileX > 2 * self.tileSize // 3:
-                        result = False
-
+        if self.blocksAround:
+            result = False
+        # if self.lastDirection == "left":
+        #     nearTile = self.tileMap[self.realative_position[1]][self.realative_position[0] - 1]
+        #     nearTileElevation = self.currentMap[self.realative_position[1]][self.realative_position[0] - 1][1]
+        #     nearLowerTile = self.tileMap[self.realative_position[1] + 1][self.realative_position[0] - 1]
+        #     nearLowerTileElevation = self.currentMap[self.realative_position[1] - 1][self.realative_position[0] - 1][1]
+        #
+        #     if self.insideTileX <= 3/2 * self.tileSize // 5:
+        #         if nearTile.isSolid:  # and nearTileElevation <= self.player.elevation:
+        #             result = False
+        #         if nearLowerTile.isSolid:
+        #             if self.tileSize // 2 + self.step < self.insideTileY < self.tileSize:
+        #                 result = False
+        #
+        #             # print("relative:", self.realative_position[0] - 1, "barrier:", self.leftBarrier)
+        #             # if self.realative_position[0] < self.leftBarrier:
+        #             #     result = True
+        #             # else:
+        #             #     result = False
+        #
+        #         # if nearLowerTile.isSolid:
+        #         #     if self.bottomBarrier * self.tileSize < (self.realative_position[1] + 1.2) * self.tileSize:
+        #         #         result = True
+        #         #     else:
+        #         #         result = False
+        #
+        #         # if self.topBarrier * self.tileSize > (self.realative_position[1] + 0.5) * self.tileSize:
+        #         #     result = True
+        #         # else:
+        #         #     result = False
+        #
+        # if self.lastDirection == "right":
+        #     nearTile = self.tileMap[self.realative_position[1]][self.realative_position[0] + 1]
+        #     nearTileElevation = self.currentMap[self.realative_position[1]][self.realative_position[0] + 1][1]
+        #     nearLowerTile = self.tileMap[self.realative_position[1] + 1][self.realative_position[0] + 1]
+        #     nearLowerTileElevation = self.currentMap[self.realative_position[1] - 1][self.realative_position[0] + 1][1]
+        #
+        #     if self.insideTileX >= self.tileSize - (3/2 * self.tileSize//5):
+        #         if nearTile.isSolid:  # and nearTileElevation <= self.player.elevation:
+        #             result = False
+        #         if nearLowerTile.isSolid:
+        #             if self.tileSize // 2 + self.step <= self.insideTileY < self.tileSize:
+        #                 result = False
+        #
+        # if self.lastDirection == "up":
+        #     nearTile = self.tileMap[self.realative_position[1] - 1][self.realative_position[0]]
+        #     nearTileElevation = self.currentMap[self.realative_position[1] - 1][self.realative_position[0]][1]
+        #     nearLeftTile = self.tileMap[self.realative_position[1] - 1][self.realative_position[0] - 1]
+        #     nearLeftTileElevation = self.currentMap[self.realative_position[1] - 1][self.realative_position[0] - 1][1]
+        #     nearRightTile = self.tileMap[self.realative_position[1] - 1][self.realative_position[0] + 1]
+        #     nearRightTileElevation = self.currentMap[self.realative_position[1] - 1][self.realative_position[0] + 1][1]
+        #
+        #     if self.insideTileY <= self.tileSize / 15:
+        #         if nearTile.isSolid:
+        #             result = False
+        #         if nearLeftTile.isSolid:
+        #             if self.insideTileX <= 3 / 2 * self.tileSize / 5:
+        #                 result = False
+        #         if nearRightTile.isSolid:
+        #             if self.insideTileX >= self.tileSize - (3/2 * self.tileSize /5):
+        #                 result = False
+        #
+        # if self.lastDirection == "down":
+        #     nearTile = self.tileMap[self.realative_position[1] + 1][self.realative_position[0]]
+        #     nearTileElevation = self.currentMap[self.realative_position[1] + 1][self.realative_position[0]][1]
+        #     nearLeftTile = self.tileMap[self.realative_position[1] + 1][self.realative_position[0] - 1]
+        #     nearLeftTileElevation = self.currentMap[self.realative_position[1] + 1][self.realative_position[0] - 1][1]
+        #     nearRightTile = self.tileMap[self.realative_position[1] + 1][self.realative_position[0] + 1]
+        #     nearRightTileElevation = self.currentMap[self.realative_position[1] + 1][self.realative_position[0] + 1][1]
+        #
+        #     if self.insideTileY >= self.tileSize // 2:
+        #         if nearTile.isSolid:
+        #             result = False
+        #         if nearLeftTile.isSolid:
+        #             if self.insideTileX <= self.tileSize // 3:
+        #                 result = False
+        #         if nearRightTile.isSolid:
+        #             if self.insideTileX > 2 * self.tileSize // 3:
+        #                 result = False
+        #
 
         return result
 
     def move(self):
-        if self.lastDirection == "up":  # and self.canMove(keyPressed):
+        if self.lastDirection == "up":  # and self.canMove(keysPressed):
             self.insideTileY -= self.step
-        elif self.lastDirection == "left":  # and self.canMove(keyPressed):
+
+        elif self.lastDirection == "left":  # and self.canMove(keysPressed):
             self.insideTileX -= self.step
-        elif self.lastDirection == "down":  # and self.canMove(keyPressed):
+
+        elif self.lastDirection == "down":  # and self.canMove(keysPressed):
             self.insideTileY += self.step
-        elif self.lastDirection == "right":  # and self.canMove(keyPressed):
+
+        elif self.lastDirection == "right":  # and self.canMove(keysPressed):
             self.insideTileX += self.step
 
-    def setDirection(self, keyPressed):
-        if keyPressed[pygame.K_a]:
+        elif self.lastDirection == "up_left":
+            self.insideTileY -= self.step
+            self.insideTileX -= self.step
+
+        elif self.lastDirection == "up_right":
+            self.insideTileY -= self.step
+            self.insideTileX += self.step
+
+        elif self.lastDirection == "down_left":
+            self.insideTileY += self.step
+            self.insideTileX -= self.step
+
+        elif self.lastDirection == "down_right":
+            self.insideTileY += self.step
+            self.insideTileX += self.step
+
+
+    def setDirection(self, keysPressed):
+        if keysPressed[pygame.K_a] and keysPressed[pygame.K_w]:
+            self.lastDirection = "up_left"
+        elif keysPressed[pygame.K_d] and keysPressed[pygame.K_w]:
+            self.lastDirection = "up_right"
+        elif keysPressed[pygame.K_a] and keysPressed[pygame.K_s]:
+            self.lastDirection = "down_left"
+        elif keysPressed[pygame.K_d] and keysPressed[pygame.K_s]:
+            self.lastDirection = "down_right"
+        elif keysPressed[pygame.K_a]:
             self.lastDirection = "left"
-        elif keyPressed[pygame.K_d]:
+        elif keysPressed[pygame.K_d]:
             self.lastDirection = "right"
-        elif keyPressed[pygame.K_w]:
+        elif keysPressed[pygame.K_w]:
             self.lastDirection = "up"
-        elif keyPressed[pygame.K_s]:
+        elif keysPressed[pygame.K_s]:
             self.lastDirection = "down"
         else:
             self.lastDirection = "none"

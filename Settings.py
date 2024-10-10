@@ -13,7 +13,7 @@ defaultChunkSize = defaultWidthTiles
 # doorPosition = [30, 8]
 
 FPS = 60
-defaultStep = defaultTileSize // 20
+defaultStep = defaultTileSize //5
 
 playerX = 10
 playerY = 25

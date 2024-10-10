@@ -50,8 +50,7 @@ class Game:
         self.keyPressed = pygame.key.get_pressed()
         self.posManage.setDirection(self.keyPressed)
 
-        if self.posManage.canMove():
-            self.posManage.move()
+        self.posManage.move()
 
         self.posManage.checkAndChangePosition()
         self.inputManage.checkMouseInput()
