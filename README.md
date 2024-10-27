@@ -1,2 +1,3 @@
 # 2D_Game_SAVE1
-This is my personal project that hopefully will be a success
+This is a game with a self-generating map that allows the player to place blocks in a 2D world with different bioms.
+It is, however, still a work in progress!
